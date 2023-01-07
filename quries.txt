@@ -1,0 +1,46 @@
+Q1:Q1: what is the highest amount the customer spent?
+******************************************************
+select first_name As name_of_customer,cast (sum(amount)as int)as Total_Amount,city
+from payment join customer
+using (customer_id)
+join address
+using(address_id)
+join city
+using(city_id)
+group by customer_id,city
+order by Total_Amount desc
+limit 20
+---------------------------------------------------------------------------------------------------------------------
+Q2: what is the MAX rate for all movies and thire length
+
+select distinct title AS Name, release_year,length, MAX(rental_rate) over (partition by title) movie_MAX_rental
+from film join film_category
+using(film_id)
+join category using(category_id)
+
+-------------------------------------------------------------------------------------------------------------------
+Q3: list of name of customers who payed more then AVG
+
+select  (amount)as MAXimum ,first_name
+FROM payment join customer using (customer_id)
+where amount >(select avg(amount) from payment  ) 
+group by first_name,amount
+limit 20
+------------------------------------------------------------------------------------------------------------------
+Q4:what is the name of movies that greater than the average length ?
+
+select title as Movie_Titel,replacement_cost,length,name as movie_type
+from film join film_category
+using(film_id)
+join category
+using(category_id)
+where name in ('Documentary','Family','Comedy')AND
+length >(select avg(length)from film)
+group by name,title,replacement_cost,length
+having replacement_cost >20
+order by 2 desc
+limit 20
+
+
+
+
